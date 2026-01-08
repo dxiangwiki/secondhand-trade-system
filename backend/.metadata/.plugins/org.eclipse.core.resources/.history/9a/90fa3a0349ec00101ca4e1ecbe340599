@@ -1,0 +1,18 @@
+package com.school.secondhand.utils;
+
+import org.springframework.util.DigestUtils;
+
+public class PasswordUtil {
+    // 密码加密
+    public static String encrypt(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            return "";
+        }
+        return DigestUtils.md5DigestAsHex(password.trim().getBytes());
+    }
+
+    // 密码校验
+    public static boolean check(String rawPwd, String encryptPwd) {
+        return encrypt(rawPwd).equals(encryptPwd);
+    }
+}

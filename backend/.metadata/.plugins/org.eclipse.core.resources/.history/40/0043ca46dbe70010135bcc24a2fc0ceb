@@ -1,0 +1,55 @@
+// UserService.java
+package com.school.secondhand.service;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.school.secondhand.entity.User;
+
+public interface UserService extends IService<User> {
+    // 自定义业务：用户登录
+    User login(String username, String password);
+    // 用户注册
+    boolean register(User user);
+}
+
+// UserServiceImpl.java（实现类）
+package com.school.secondhand.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.school.secondhand.entity.User;
+import com.school.secondhand.mapper.UserMapper;
+import com.school.secondhand.service.UserService;
+import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
+
+@Service
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    // 密码加密（MD5），保证数据安全
+    private String encryptPassword(String password) {
+        return DigestUtils.md5DigestAsHex(password.getBytes());
+    }
+
+    @Override
+    public User login(String username, String password) {
+        // 查询用户
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername, username);
+        User user = this.getOne(queryWrapper);
+        // 校验密码（加密后对比）
+        if (user != null && encryptPassword(password).equals(user.getPassword())) {
+            return user;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean register(User user) {
+        // 加密密码
+        user.setPassword(encryptPassword(user.getPassword()));
+        // 保存用户
+        return this.save(user);
+    }
+}
+
+// GoodsService、OrderService 同理（实现商品发布、订单生成等逻辑）

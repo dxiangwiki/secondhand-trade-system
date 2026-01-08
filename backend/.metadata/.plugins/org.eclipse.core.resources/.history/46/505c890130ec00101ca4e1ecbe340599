@@ -1,0 +1,5 @@
+package com.school.secondhand.exception;
+
+public class GlobalExceptionHandler {
+
+}

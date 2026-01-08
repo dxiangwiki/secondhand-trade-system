@@ -1,0 +1,13 @@
+// UserMapper.java
+package com.school.secondhand.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.school.secondhand.entity.User;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface UserMapper extends BaseMapper<User> {
+    // MyBatis-Plus自带CRUD，无需手写
+}
+
+// GoodsMapper.java、OrderMapper.java 同理

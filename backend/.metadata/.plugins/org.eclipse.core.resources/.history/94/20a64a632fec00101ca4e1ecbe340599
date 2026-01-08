@@ -1,0 +1,5 @@
+package com.school.secondhand.service;
+
+public class OrderService {
+
+}

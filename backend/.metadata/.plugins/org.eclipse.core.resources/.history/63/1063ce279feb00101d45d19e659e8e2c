@@ -1,0 +1,12 @@
+// UserService.java
+package com.school.secondhand.service;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.school.secondhand.entity.User;
+
+public interface UserService extends IService<User> {
+    // 自定义业务：用户登录
+    User login(String username, String password);
+    // 用户注册
+    boolean register(User user);
+}
