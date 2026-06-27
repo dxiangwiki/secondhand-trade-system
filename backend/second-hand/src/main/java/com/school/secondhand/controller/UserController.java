@@ -12,7 +12,6 @@ import java.util.Map;
 
 // 单独放在UserController.java文件中
 @RestController
-@CrossOrigin // 解决跨域
 @RequestMapping("/user") // 接口前缀：/user
 public class UserController {
 

@@ -2,48 +2,41 @@ package com.school.secondhand.controller;
 
 import com.school.secondhand.entity.Goods;
 import com.school.secondhand.service.GoodsService;
+import com.school.secondhand.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
+import com.school.secondhand.service.GoodsService;
 @RestController
-@CrossOrigin // 解决跨域
-@RequestMapping("/goods") // 接口前缀：/goods
+@RequestMapping("/goods")
 public class GoodsController {
 
+    // 漏掉了这段注入代码，补上就解决报错
     @Autowired
     private GoodsService goodsService;
 
-    // 1. 发布商品：POST http://localhost:8080/api/goods/publish
+    // 发布商品
     @PostMapping("/publish")
-    public Map<String, Object> publishGoods(@RequestBody Goods goods) {
-        Map<String, Object> result = new HashMap<>();
+    public Result<?> publishGoods(@RequestBody Goods goods) {
         boolean success = goodsService.publishGoods(goods);
-        result.put("success", success);
-        result.put("msg", success ? "发布成功" : "发布失败（参数缺失）");
-        return result;
+        if (success) {
+            return Result.success("发布成功");
+        } else {
+            return Result.error("发布失败（参数缺失）");
+        }
     }
 
-    // 2. 查询用户发布的商品：GET http://localhost:8080/api/goods/user/1
+    // 查询用户发布商品
     @GetMapping("/user/{userId}")
-    public Map<String, Object> getGoodsByUserId(@PathVariable Long userId) {
-        Map<String, Object> result = new HashMap<>();
+    public Result<List<Goods>> getGoodsByUserId(@PathVariable Long userId) {
         List<Goods> goodsList = goodsService.getGoodsByUserId(userId);
-        result.put("success", true);
-        result.put("data", goodsList);
-        return result;
+        return Result.success(goodsList);
     }
 
-    // 3. 查询所有在售商品：GET http://localhost:8080/api/goods/onSale
+    // 查询所有在售商品
     @GetMapping("/onSale")
-    public Map<String, Object> getOnSaleGoods() {
-        Map<String, Object> result = new HashMap<>();
+    public Result<List<Goods>> getOnSaleGoods() {
         List<Goods> goodsList = goodsService.getOnSaleGoods();
-        result.put("success", true);
-        result.put("data", goodsList);
-        return result;
+        return Result.success(goodsList);
     }
 }
