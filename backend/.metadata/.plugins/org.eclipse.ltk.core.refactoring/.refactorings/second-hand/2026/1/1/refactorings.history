@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;application.yml&apos; to &apos;second-hand/src/main/resources&apos;&#x0D;&#x0A;－ 原始项目：“second-hand”&#x0D;&#x0A;－ 目标元素：“second-hand/src/main/resources”&#x0D;&#x0A;－ 原始元素：“application.yml”&#x0D;&#x0A;－ 更新对已重构元素的引用" description="移动文件" destination="/src\/main\/resources=/maven.pomderived=/true=/=/optional=/true=/" element1="src/main/resources/mapper/application.yml" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1767358310101" units="0" version="1.0"/>
+</session>

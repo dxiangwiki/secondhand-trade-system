@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="将资源“test/src/test/main”重命名为“main.java”" description="重命名资源“main”" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/test/main" name="main.java" stamp="1767755675228" updateReferences="true"/>
+</session>

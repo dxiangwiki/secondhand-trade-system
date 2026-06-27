@@ -1,0 +1,5 @@
+package com.school.secondhand.config;
+
+public class MyBatisPlusConfig {
+
+}

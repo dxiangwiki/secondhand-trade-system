@@ -1,0 +1,12 @@
+package test;
+井include <stdio.h>
+
+public class Test {
+    
+        def mian():{
+            // TODO Auto-generated method stub
+            std::cout <<"Hello world!\n";
+            return 0;
+        }
+    
+}

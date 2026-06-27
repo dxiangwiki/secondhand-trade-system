@@ -1,0 +1,46 @@
+package com.school.secondhand.controller;
+
+import com.school.secondhand.entity.User;
+import com.school.secondhand.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+// 单独放在UserController.java文件中
+@RestController
+@CrossOrigin // 解决跨域
+@RequestMapping("/user") // 接口前缀：/user
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/register")
+    public Result<?> register(@RequestBody User user) {
+        boolean success = userService.register(user);
+        if (success) {
+            // 成功：msg是通用提示，data是具体结果
+            return Result.success("注册成功");
+        } else {
+            // 失败：msg是具体原因
+            return Result.error("用户名已存在或参数错误");
+        }
+    }
+
+    // 登录接口：POST http://localhost:8080/api/user/login
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody User user) {
+        Map<String, Object> result = new HashMap<>();
+        User loginUser = userService.login(user.getUsername(), user.getPassword());
+        if (loginUser != null) {
+            result.put("success", true);
+            result.put("data", loginUser);
+        } else {
+            result.put("success", false);
+            result.put("msg", "用户名或密码错误");
+        }
+        return result;
+    }
+}

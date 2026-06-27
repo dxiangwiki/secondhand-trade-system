@@ -1,0 +1,72 @@
+package com.school.secondhand.service.impl;
+import com.school.secondhand.utils.PasswordUtil; // 必须加这行导入
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.school.secondhand.entity.User;
+import com.school.secondhand.mapper.UserMapper;
+import com.school.secondhand.service.UserService;
+import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
+
+// 注意：这个类必须是public，且单独放在UserServiceImpl.java文件中
+@Service
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+	// 密码加密工具方法（MD5）
+	private String encryptPassword(String password) {
+		// 判空：避免空指针
+		if (password == null || password.isEmpty()) {
+			return "";
+		}
+		return DigestUtils.md5DigestAsHex(password.getBytes());
+	}
+
+	@Override
+	public User login(String username, String password) {
+		// 改用普通QueryWrapper，彻底解决Lambda兼容问题
+		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("username", username); // 直接写数据库字段名，无兼容问题
+		User user = this.getOne(queryWrapper);
+
+		// 校验密码（加密后对比）
+		if (user != null && encryptPassword(password).equals(user.getPassword())) {
+			return user;
+		}
+		return null;
+	}
+
+	@Override
+	public boolean register(User user) {
+	    // 1. 判空+去空格
+	    if (user == null) {
+	        return false;
+	    }
+	    String username = user.getUsername() == null ? "" : user.getUsername().trim();
+	    String password = user.getPassword() == null ? "" : user.getPassword().trim();
+	    String phone = user.getPhone() == null ? "" : user.getPhone().trim();
+	    
+	    // 2. 新增：手机号校验（长度11位+纯数字）
+	    if (username.isEmpty() || password.isEmpty()) {
+	        return false;
+	    }
+	    // 手机号非空时，校验长度和格式
+	    if (!phone.isEmpty() && (phone.length() != 11 || !phone.matches("^1[3-9]\\d{9}$"))) {
+	        System.out.println("手机号格式错误：" + phone);
+	        return false;
+	    }
+
+	    // 3. 用户名唯一性校验（原有逻辑）
+	    QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+	    queryWrapper.eq("username", username);
+	    if (this.count(queryWrapper) > 0) {
+	        System.out.println("用户名" + username + "已存在");
+	        return false;
+	    }
+
+	    // 4. 加密+保存（原有逻辑）
+	    user.setUsername(username);
+	    user.setPassword(PasswordUtil.encrypt(password));
+	    user.setPhone(phone);
+	    return this.save(user);
+	}
+}

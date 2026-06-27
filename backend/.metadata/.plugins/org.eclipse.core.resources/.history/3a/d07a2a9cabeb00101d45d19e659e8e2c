@@ -1,0 +1,5 @@
+package com.school.secondhand.entity;
+
+public class Goods {
+
+}
